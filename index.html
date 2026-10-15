@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aventura de los Decimales – Grado 4°</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#FFFDF6;--grid:#DCE8F7;--ink:#1F2A44;--blue:#2F6FED;--yellow:#FFC93C;--green:#23995A;--coral:#E8504A;--soft:#EEF4FF}
+*{box-sizing:border-box}
+body{margin:0;font-family:Nunito,"Trebuchet MS",sans-serif;font-size:18px;color:var(--ink);line-height:1.5;
+background-color:var(--paper);background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:28px 28px}
+h1,h2,h3{font-family:"Baloo 2","Trebuchet MS",sans-serif;margin:.2em 0;line-height:1.15}
+header{background:var(--blue);color:#fff;padding:18px 16px;text-align:center;border-bottom:6px solid var(--yellow)}
+header h1{font-size:clamp(26px,5vw,40px);font-weight:800}
+header p{margin:0;opacity:.95}
+nav{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;padding:12px;background:#fff;border-bottom:2px solid var(--grid);position:sticky;top:0;z-index:5}
+nav button{font:700 16px Nunito,sans-serif;border:2px solid var(--blue);background:#fff;color:var(--blue);padding:8px 14px;border-radius:999px;cursor:pointer}
+nav button.on{background:var(--blue);color:#fff}
+nav button:disabled{opacity:.4;cursor:not-allowed}
+main{max-width:860px;margin:0 auto;padding:18px 14px 60px}
+section{display:none;background:#fff;border:3px solid var(--ink);border-radius:18px;padding:20px;box-shadow:6px 6px 0 var(--ink)}
+section.on{display:block}
+.btn{font:800 18px "Baloo 2",sans-serif;background:var(--yellow);color:var(--ink);border:3px solid var(--ink);border-radius:12px;padding:8px 20px;cursor:pointer;box-shadow:3px 3px 0 var(--ink)}
+.btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
+.btn.sec{background:#fff}
+:focus-visible{outline:4px solid var(--coral);outline-offset:2px}
+input[type=text],input[type=number],select{font:700 18px Nunito,sans-serif;padding:8px 12px;border:3px solid var(--ink);border-radius:10px;max-width:100%}
+.box{background:var(--soft);border-left:8px solid var(--blue);border-radius:10px;padding:10px 14px;margin:12px 0}
+.box.y{background:#FFF6D6;border-color:var(--yellow)}
+.big{font:800 34px "Baloo 2",sans-serif;color:var(--blue)}
+table.vt{border-collapse:collapse;margin:10px auto;text-align:center}
+table.vt td,table.vt th{border:2px solid var(--ink);padding:8px 14px;font-weight:700}
+table.vt th{background:var(--yellow)}
+.q{border:2px dashed var(--grid);border-radius:12px;padding:12px;margin:14px 0}
+.q .opts{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.opt{font:700 17px Nunito,sans-serif;background:#fff;border:3px solid var(--ink);border-radius:10px;padding:6px 14px;cursor:pointer}
+.opt.sel{background:var(--blue);color:#fff}
+.opt.ok{background:var(--green);color:#fff}
+.opt.bad{background:var(--coral);color:#fff}
+.fb{margin-top:8px;font-weight:700}
+.fb.ok{color:var(--green)}.fb.bad{color:var(--coral)}
+.grid100{display:grid;grid-template-columns:repeat(10,1fr);gap:2px;width:min(100%,300px);margin:10px auto;border:3px solid var(--ink);padding:2px;background:var(--ink)}
+.grid100 i{aspect-ratio:1;background:#fff;cursor:pointer;display:block}
+.grid100 i.f{background:var(--blue)}
+.line{position:relative;margin:34px 14px 40px}
+.line input[type=range]{width:100%}
+.ticks{display:flex;justify-content:space-between;font-weight:700;font-size:14px}
+.bar{height:22px;background:var(--grid);border-radius:11px;overflow:hidden}
+.bar div{height:100%}
+.res-row{display:grid;grid-template-columns:150px 1fr 60px;gap:10px;align-items:center;margin:8px 0}
+@media(max-width:520px){.res-row{grid-template-columns:1fr}}
+.nota{font:800 64px "Baloo 2",sans-serif;text-align:center}
+@media print{nav,header .hide,.btn{display:none}body{background:#fff}}
+@media (prefers-reduced-motion:no-preference){.bar div{transition:width .8s}}
+</style>
+</head>
+<body>
+<header><h1>🔢 La Aventura de los Decimales</h1><p>Matemáticas · Grado 4° de primaria</p></header>
+<nav id="nav" aria-label="Secciones">
+<button data-s="inicio" class="on">🏠 Inicio</button>
+<button data-s="teoria" disabled>📘 Teoría</button>
+<button data-s="juegos" disabled>🎮 Ejercicios interactivos</button>
+<button data-s="taller" disabled>✏️ Taller de práctica</button>
+<button data-s="eval" disabled>📝 Evaluación</button>
+<button data-s="result" disabled>🏅 Mi nota</button>
+</nav>
+<main>
+
+<!-- INICIO -->
+<section id="inicio" class="on">
+<h2>¡Hola, explorador de números!</h2>
+<p>Hoy aprenderás qué son los <b>números decimales</b>, cómo ubicarlos en la <b>recta numérica</b> y qué son las <b>fracciones decimales</b>.</p>
+<p><label for="nombre"><b>Escribe tu nombre para empezar:</b></label><br>
+<input type="text" id="nombre" maxlength="40" placeholder="Tu nombre y apellido" autocomplete="off"></p>
+<p id="errNombre" class="fb bad" hidden>Escribe tu nombre para continuar.</p>
+<button class="btn" id="start">¡Comenzar!</button>
+<div class="box y"><b>Ruta:</b> Teoría → Ejercicios interactivos → Taller de práctica → Evaluación → Mi nota.</div>
+</section>
+
+<!-- TEORIA -->
+<section id="teoria">
+<h2>📘 Teoría</h2>
+<h3>1. ¿Qué es un número decimal?</h3>
+<p>Un número decimal sirve para escribir partes de un entero. Tiene una <b>coma decimal</b> que separa los enteros de las partes.</p>
+<div class="box">Una pizza entera se parte en 10 pedazos iguales. Si comes 3 pedazos, comiste <span class="big">0,3</span> de la pizza. Se lee <b>"tres décimas"</b>.</div>
+<table class="vt"><tr><th>Centenas</th><th>Decenas</th><th>Unidades</th><th>,</th><th>Décimas</th><th>Centésimas</th></tr>
+<tr><td>0</td><td>2</td><td>5</td><td>,</td><td>3</td><td>7</td></tr></table>
+<p>El número 25,37 se lee: <b>veinticinco enteros con treinta y siete centésimas</b>. El 3 vale 3 décimas (0,3) y el 7 vale 7 centésimas (0,07).</p>
+<div class="box y"><b>Recuerda:</b> 0,6 y 0,60 valen lo mismo. Para comparar, mira primero los enteros, luego las décimas y después las centésimas. Ejemplo: 0,8 &gt; 0,75 porque 8 décimas es más que 7 décimas.</div>
+
+<h3>2. Los decimales en la recta numérica</h3>
+<p>Entre el 0 y el 1 hay muchos números. Si divides ese tramo en <b>10 partes iguales</b>, cada parte vale <b>0,1</b>.</p>
+<svg viewBox="0 0 520 90" width="100%" role="img" aria-label="Recta numérica de 0 a 1 dividida en diez partes">
+<line x1="20" y1="40" x2="500" y2="40" stroke="#1F2A44" stroke-width="4"/>
+<g id="svgTicks"></g>
+</svg>
+<p>El punto medio entre 2 y 3 es <b>2,5</b>. Mientras más a la derecha, más grande es el número.</p>
+
+<h3>3. Fracciones decimales</h3>
+<p>Una <b>fracción decimal</b> es una fracción con denominador 10, 100, 1000… Se puede escribir como decimal.</p>
+<table class="vt"><tr><th>Fracción</th><th>Decimal</th><th>Se lee</th></tr>
+<tr><td>3/10</td><td>0,3</td><td>tres décimas</td></tr>
+<tr><td>25/100</td><td>0,25</td><td>veinticinco centésimas</td></tr>
+<tr><td>7/100</td><td>0,07</td><td>siete centésimas</td></tr></table>
+<div class="box y"><b>Truco:</b> el denominador 10 deja <b>1 cifra</b> después de la coma. El denominador 100 deja <b>2 cifras</b>.</div>
+<button class="btn" data-go="juegos">Ir a los ejercicios interactivos →</button>
+</section>
+
+<!-- JUEGOS -->
+<section id="juegos">
+<h2>🎮 Ejercicios interactivos</h2>
+<h3>Juego 1: Pinta el decimal</h3>
+<p>Pinta cuadritos para formar <b id="g1target">0,35</b>. Cada cuadrito es <b>una centésima</b> (1/100).</p>
+<div class="grid100" id="g1"></div>
+<p style="text-align:center"><b id="g1info">0/100 = 0,00</b></p>
+<div style="text-align:center"><button class="btn" id="g1check">Revisar</button> <button class="btn sec" id="g1new">Otro número</button></div>
+<p class="fb" id="g1fb" style="text-align:center"></p>
+<hr>
+<h3>Juego 2: Ubica el punto en la recta</h3>
+<p>Mueve el control hasta ubicar <b id="g2target">0,7</b>.</p>
+<div class="line"><input type="range" id="g2" min="0" max="10" step="1" value="0" aria-label="Posición en la recta"><div class="ticks" id="g2ticks"></div></div>
+<p style="text-align:center">Estás en: <b id="g2val" class="big">0,0</b></p>
+<div style="text-align:center"><button class="btn" id="g2check">Revisar</button> <button class="btn sec" id="g2new">Otro número</button></div>
+<p class="fb" id="g2fb" style="text-align:center"></p>
+<hr>
+<h3>Juego 3: Une la fracción con su decimal</h3>
+<div id="g3"></div>
+<button class="btn" id="g3check">Revisar</button>
+<p class="fb" id="g3fb"></p>
+<hr>
+<button class="btn" data-go="taller">Ir al taller de práctica →</button>
+</section>
+
+<!-- TALLER -->
+<section id="taller">
+<h2>✏️ Taller de práctica</h2>
+<p>Aquí puedes equivocarte y aprender. Cada respuesta te dice si está bien y te da una pista. <b>No cuenta para la nota.</b></p>
+<div id="tallerBox"></div>
+<button class="btn" data-go="eval">Ir a la evaluación →</button>
+</section>
+
+<!-- EVAL -->
+<section id="eval">
+<h2>📝 Evaluación</h2>
+<p>Responde las 20 preguntas. Esta sí cuenta para tu nota. Cuando termines, pulsa el botón al final.</p>
+<div id="evalBox"></div>
+<p class="fb bad" id="evalErr" hidden>Te faltan preguntas por responder.</p>
+<button class="btn" id="genNota">Generar mi nota 🏅</button>
+</section>
+
+<!-- RESULT -->
+<section id="result">
+<h2>🏅 Resultados de <span id="rNombre"></span></h2>
+<div class="nota" id="rNota"></div>
+<p style="text-align:center;font-weight:700" id="rNivel"></p>
+<p style="text-align:center">Aciertos: <b id="rAciertos"></b></p>
+<h3>Resultado por tema</h3>
+<div id="rTemas"></div>
+<h3>Dificultades observadas y sugerencias</h3>
+<div id="rSug"></div>
+<div style="margin-top:16px"><button class="btn" onclick="window.print()">🖨️ Imprimir resumen</button> <button class="btn sec" id="retry">Intentar de nuevo</button></div>
+</section>
+</main>
+
+<script>
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const fmt=(n,d=1)=>n.toFixed(d).replace('.',',');
+const TEMAS={conc:'Conceptos de decimales',recta:'Recta numérica',frac:'Fracciones decimales'};
+const SUG={
+conc:['Repasa la tabla de valor posicional: décimas, centésimas.','Lee los números en voz alta: 0,3 es "tres décimas".','Para comparar, empieza por los enteros y luego por las décimas. Usa el juego "Pinta el decimal".'],
+recta:['Dibuja una recta de 0 a 1 y divídela en 10 partes iguales; cada parte vale 0,1.','Practica el juego "Ubica el punto en la recta".','Para hallar el punto medio entre dos números, cuenta cuántas partes hay entre ellos.'],
+frac:['Recuerda: denominador 10 = una cifra decimal; denominador 100 = dos cifras.','Pinta cuadritos en una cuadrícula de 100 y escribe la fracción y el decimal.','Practica el juego "Une la fracción con su decimal".']};
+
+// Preguntas: t=tema, q=enunciado, o=opciones, a=indice correcto, h=pista
+const TALLER=[
+{t:'conc',q:'¿Cómo se lee 0,4?',o:['cuatro décimas','cuatro centésimas','cuarenta enteros'],a:0,h:'Una cifra después de la coma son décimas.'},
+{t:'conc',q:'En 5,62, ¿qué valor tiene el 6?',o:['6 unidades','6 décimas','6 centésimas'],a:1,h:'La primera cifra después de la coma son las décimas.'},
+{t:'recta',q:'Entre 0 y 1 hay 10 partes iguales. ¿Cuánto vale cada una?',o:['0,01','0,1','1'],a:1,h:'1 dividido en 10 partes da una décima.'},
+{t:'recta',q:'¿Qué número queda justo en la mitad entre 1 y 2?',o:['1,2','1,5','1,9'],a:1,h:'La mitad de 10 décimas son 5 décimas.'},
+{t:'frac',q:'La fracción 9/10 escrita como decimal es…',o:['0,9','0,09','9,10'],a:0,h:'Denominador 10: una cifra después de la coma.'},
+{t:'frac',q:'El decimal 0,13 escrito como fracción es…',o:['13/10','13/100','1/30'],a:1,h:'Dos cifras decimales: denominador 100.'},
+{t:'conc',q:'¿Cuál número es mayor?',o:['0,3','0,29','Son iguales'],a:0,h:'0,3 es lo mismo que 0,30. Compara 30 centésimas con 29 centésimas.'},
+{t:'conc',q:'¿Cómo se escribe "ocho centésimas"?',o:['0,8','0,08','8,00'],a:1,h:'Las centésimas ocupan la segunda cifra después de la coma.'},
+{t:'conc',q:'2,5 es igual a…',o:['2,50','2,05','25,0'],a:0,h:'Agregar un cero al final de un decimal no cambia su valor.'},
+{t:'conc',q:'¿Cuál lista está ordenada de menor a mayor?',o:['0,2 – 0,5 – 0,9','0,9 – 0,5 – 0,2','0,5 – 0,2 – 0,9'],a:0,h:'Compara las décimas: 2, 5 y 9.'},
+{t:'recta',q:'En una recta que avanza de 0,1 en 0,1, ¿qué número va después de 0,6?',o:['0,61','0,7','0,16'],a:1,h:'Suma una décima: 0,6 + 0,1.'},
+{t:'recta',q:'El punto 0,3 queda entre los números enteros…',o:['0 y 1','1 y 2','3 y 4'],a:0,h:'0,3 es menor que 1 y mayor que 0.'},
+{t:'recta',q:'¿Cuál decimal queda más cerca del 1?',o:['0,2','0,5','0,9'],a:2,h:'Mientras más grande el decimal (menor que 1), más cerca está del 1.'},
+{t:'frac',q:'La fracción 1/10 escrita como decimal es…',o:['0,1','1,10','0,01'],a:0,h:'Una décima se escribe con una cifra después de la coma.'},
+{t:'frac',q:'El decimal 0,45 escrito como fracción es…',o:['45/10','45/100','4/5'],a:1,h:'Dos cifras decimales: denominador 100.'},
+{t:'frac',q:'La fracción 60/100 escrita como decimal es…',o:['0,06','0,6','6,0'],a:1,h:'60 centésimas es lo mismo que 6 décimas.'}];
+const EVAL=[
+{t:'conc',q:'¿Cómo se lee 0,5?',o:['cinco décimas','cinco centésimas','cincuenta'],a:0},
+{t:'conc',q:'En 3,47, ¿qué valor tiene el 4?',o:['4 unidades','4 décimas','4 centésimas'],a:1},
+{t:'conc',q:'¿Cuál número es mayor?',o:['0,75','0,8','Son iguales'],a:1},
+{t:'conc',q:'0,60 es igual a…',o:['0,06','6,0','0,6'],a:2},
+{t:'recta',q:'Entre 0 y 1 dividido en 10 partes iguales, cada parte vale…',o:['1','0,1','0,01'],a:1},
+{t:'recta',q:'¿Cuál número está entre 0,4 y 0,6?',o:['0,5','0,7','0,3'],a:0},
+{t:'recta',q:'El punto que está en la mitad entre 2 y 3 es…',o:['2,1','2,5','2,9'],a:1},
+{t:'frac',q:'3/10 escrito como decimal es…',o:['0,03','3,10','0,3'],a:2},
+{t:'frac',q:'0,25 escrito como fracción es…',o:['25/100','25/10','2/5'],a:0},
+{t:'frac',q:'7/100 escrito como decimal es…',o:['0,7','0,07','7,100'],a:1},
+{t:'conc',q:'¿Cómo se lee 0,09?',o:['nueve décimas','nueve centésimas','noventa'],a:1},
+{t:'conc',q:'En 8,15, ¿qué valor tiene el 5?',o:['5 décimas','5 centésimas','5 unidades'],a:1},
+{t:'conc',q:'¿Cuál número es el menor?',o:['0,4','0,35','0,5'],a:1},
+{t:'conc',q:'1,2 es igual a…',o:['1,02','1,20','12,0'],a:1},
+{t:'recta',q:'¿Cuál número queda justo a la mitad entre 0,2 y 0,3?',o:['0,22','0,25','0,28'],a:1},
+{t:'recta',q:'Si avanzas de 0,1 en 0,1, ¿qué número sigue después de 0,8?',o:['0,9','0,81','1,8'],a:0},
+{t:'recta',q:'¿Cuál punto queda más a la derecha en la recta numérica?',o:['0,6','0,65','0,7'],a:2},
+{t:'frac',q:'5/10 escrito como decimal es…',o:['0,05','0,5','5,10'],a:1},
+{t:'frac',q:'0,8 escrito como fracción decimal es…',o:['8/10','8/100','80/10'],a:0},
+{t:'frac',q:'32/100 escrito como decimal es…',o:['3,2','0,32','0,032'],a:1}];
+
+// Navegación
+function show(id){$$('section').forEach(s=>s.classList.toggle('on',s.id===id));
+ $$('#nav button').forEach(b=>b.classList.toggle('on',b.dataset.s===id));window.scrollTo({top:0,behavior:'smooth'})}
+$$('#nav button').forEach(b=>b.onclick=()=>show(b.dataset.s));
+document.addEventListener('click',e=>{if(e.target.dataset.go)show(e.target.dataset.go)});
+$('#start').onclick=()=>{const n=$('#nombre').value.trim();
+ if(n.length<2){$('#errNombre').hidden=false;$('#nombre').focus();return}
+ $('#errNombre').hidden=true;$$('#nav button').forEach(b=>{if(b.dataset.s!=='result')b.disabled=false});show('teoria')};
+
+// SVG recta teoría
+(()=>{let h='';for(let i=0;i<=10;i++){const x=20+i*48;
+ h+=`<line x1="${x}" y1="30" x2="${x}" y2="50" stroke="#1F2A44" stroke-width="3"/><text x="${x}" y="72" text-anchor="middle" font-size="14" font-weight="700" fill="#2F6FED">${i==0?'0':i==10?'1':fmt(i/10)}</text>`}
+ $('#svgTicks').innerHTML=h})();
+
+// Juego 1
+let g1n=35;
+function g1init(){const g=$('#g1');g.innerHTML='';for(let i=0;i<100;i++){const c=document.createElement('i');c.onclick=()=>{c.classList.toggle('f');g1upd()};g.appendChild(c)}
+ g1n=(Math.floor(Math.random()*19)+1)*5;$('#g1target').textContent=fmt(g1n/100,2)+'  ('+g1n+'/100)';$('#g1fb').textContent='';g1upd()}
+function g1upd(){const n=$$('#g1 .f').length;$('#g1info').textContent=`${n}/100 = ${fmt(n/100,2)}`}
+$('#g1check').onclick=()=>{const n=$$('#g1 .f').length,f=$('#g1fb');
+ if(n===g1n){f.className='fb ok';f.textContent='¡Excelente! 🎉'}else{f.className='fb bad';f.textContent=n<g1n?`Te faltan ${g1n-n} cuadritos.`:`Te pasaste por ${n-g1n} cuadritos.`}};
+$('#g1new').onclick=g1init;
+
+// Juego 2
+let g2n=7;
+(()=>{let h='';for(let i=0;i<=10;i++)h+=`<span>${i==0?'0':i==10?'1':fmt(i/10)}</span>`;$('#g2ticks').innerHTML=h})();
+$('#g2').oninput=e=>$('#g2val').textContent=fmt(e.target.value/10);
+function g2init(){g2n=Math.floor(Math.random()*9)+1;$('#g2target').textContent=fmt(g2n/10);$('#g2').value=0;$('#g2val').textContent='0,0';$('#g2fb').textContent=''}
+$('#g2check').onclick=()=>{const v=+$('#g2').value,f=$('#g2fb');
+ if(v===g2n){f.className='fb ok';f.textContent='¡Muy bien, ese es el punto! 🎯'}else{f.className='fb bad';f.textContent=v<g2n?'Te quedaste corto. Muévete a la derecha.':'Te pasaste. Muévete a la izquierda.'}};
+$('#g2new').onclick=g2init;
+
+// Juego 3
+const PAIRS=[['4/10','0,4'],['17/100','0,17'],['9/100','0,09'],['50/100','0,5']];
+(()=>{const dec=PAIRS.map(p=>p[1]).sort(()=>Math.random()-.5);
+ $('#g3').innerHTML=PAIRS.map((p,i)=>`<p>${p[0]} = <select data-i="${i}" aria-label="Decimal de ${p[0]}"><option value="">Elige…</option>${dec.map(d=>`<option>${d}</option>`).join('')}</select></p>`).join('')})();
+$('#g3check').onclick=()=>{let ok=0;$$('#g3 select').forEach(s=>{const good=s.value===PAIRS[s.dataset.i][1];if(good)ok++;s.style.borderColor=good?'#23995A':'#E8504A'});
+ const f=$('#g3fb');f.className='fb '+(ok===4?'ok':'bad');f.textContent=ok===4?'¡Perfecto! 4 de 4 🌟':`Llevas ${ok} de 4. Revisa las que están en rojo.`};
+
+// Preguntas
+function renderQ(list,box,prefix,feedback){
+ $(box).innerHTML=list.map((q,i)=>`<div class="q" id="${prefix}${i}"><b>${i+1}. ${q.q}</b><div class="opts">${q.o.map((o,j)=>`<button class="opt" data-q="${i}" data-o="${j}">${o}</button>`).join('')}</div><div class="fb" id="${prefix}fb${i}"></div></div>`).join('')}
+renderQ(TALLER,'#tallerBox','t',true);renderQ(EVAL,'#evalBox','e',false);
+const ans={};
+$('#tallerBox').onclick=e=>{const b=e.target.closest('.opt');if(!b)return;const i=+b.dataset.q,j=+b.dataset.o,q=TALLER[i];
+ const fb=$('#tfb'+i);$$(`#t${i} .opt`).forEach(x=>x.classList.remove('ok','bad'));
+ if(j===q.a){b.classList.add('ok');fb.className='fb ok';fb.textContent='¡Correcto! ✅'}else{b.classList.add('bad');fb.className='fb bad';fb.textContent='Casi. Pista: '+q.h}};
+$('#evalBox').onclick=e=>{const b=e.target.closest('.opt');if(!b)return;const i=+b.dataset.q;
+ ans[i]=+b.dataset.o;$$(`#e${i} .opt`).forEach(x=>x.classList.remove('sel'));b.classList.add('sel')};
+
+// Nota
+$('#genNota').onclick=()=>{
+ if(Object.keys(ans).length<EVAL.length){$('#evalErr').hidden=false;return}
+ $('#evalErr').hidden=true;
+ const st={conc:[0,0],recta:[0,0],frac:[0,0]};let ok=0;
+ EVAL.forEach((q,i)=>{st[q.t][1]++;if(ans[i]===q.a){st[q.t][0]++;ok++}});
+ const nota=ok/EVAL.length*5;
+ $('#rNombre').textContent=$('#nombre').value.trim();
+ const n=$('#rNota');n.textContent=fmt(nota)+' / 5,0';n.style.color=nota>=4.5?'#23995A':nota>=3?'#2F6FED':'#E8504A';
+ $('#rNivel').textContent=nota>=4.5?'Desempeño superior 🌟':nota>=4?'Desempeño alto 👏':nota>=3?'Desempeño básico 🙂':'Desempeño bajo: ¡con práctica lo lograrás! 💪';
+ $('#rAciertos').textContent=`${ok} de ${EVAL.length}`;
+ $('#rTemas').innerHTML=Object.keys(st).map(k=>{const p=st[k][0]/st[k][1]*100,c=p>=70?'#23995A':p>=40?'#FFC93C':'#E8504A';
+  return `<div class="res-row"><span>${TEMAS[k]}</span><div class="bar"><div style="width:${p}%;background:${c}"></div></div><b>${st[k][0]}/${st[k][1]}</b></div>`}).join('');
+ const weak=Object.keys(st).filter(k=>st[k][0]/st[k][1]<.7);
+ $('#rSug').innerHTML=weak.length?weak.map(k=>`<div class="box"><b>Dificultad en: ${TEMAS[k]}</b> (${st[k][0]} de ${st[k][1]} aciertos)<ul>${SUG[k].map(s=>`<li>${s}</li>`).join('')}</ul></div>`).join('')
+  :'<div class="box y"><b>¡Felicitaciones!</b> No se observaron dificultades. Puedes retarte con decimales hasta las milésimas (0,001).</div>';
+ $('[data-s=result]').disabled=false;show('result')};
+$('#retry').onclick=()=>{for(const k in ans)delete ans[k];$$('.opt').forEach(o=>o.classList.remove('sel','ok','bad'));$$('.fb').forEach(f=>{if(f.id.startsWith('tfb'))f.textContent=''});show('teoria')};
+g1init();g2init();
+</script>
+</body>
+</html>
